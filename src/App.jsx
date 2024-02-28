@@ -4,6 +4,7 @@ import "./css/bootstrap.min.css";
 import "./css/all.min.css";
 import "./css/styles.css";
 import TodoItem from "./components/todoItem";
+import Form from "./components/form";
 
 const App = () => {
   return (
@@ -15,46 +16,7 @@ const App = () => {
         </header>
 
         <div className="lecture">
-          <form className="lecture-add" id="lecture-add">
-            <div className="row mb-2">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="name"
-                    placeholder="Enter your task "
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <select
-                    name="priority"
-                    className="form-control"
-                    placeholder="Select your priority "
-                  >
-                    <option value="0">Low</option>
-                    <option value="1">Medium</option>
-                    <option value="2">High</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-md-12">
-                <div className="forn-group">
-                  <textarea
-                    className="form-control"
-                    name="description"
-                    placeholder="Enter your description "
-                    rows="4"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-            <button className="success" type="submit">
-              Add
-            </button>
-          </form>
+          <Form />
           <div id="lecture-list">
             <ul>
               <TodoItem
