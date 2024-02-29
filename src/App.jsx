@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import "./css/bootstrap.min.css";
 import "./css/all.min.css";
@@ -7,6 +7,41 @@ import TodoItem from "./components/todoItem";
 import Form from "./components/form";
 
 const App = () => {
+  const [todoList, setTodoList] = useState([]);
+
+  useEffect(() => {
+    const list = localStorage.getItem("todoList");
+
+    const parsedList = JSON.parse(list);
+
+    setTodoList(parsedList);
+  }, []);
+
+  const handleCompleted = (todoItem) => {
+    const newArray = todoList?.map((item) => {
+      if (item?.title === todoItem.title) {
+        return {
+          ...item,
+          completed: true,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    localStorage.setItem("todoList", JSON.stringify(newArray));
+    setTodoList(newArray);
+  };
+
+  const handleDelete = (todoItem) => {
+    const newArray = todoList?.filter((item) => {
+      return item?.title !== todoItem.title;
+    })
+    setTodoList(newArray)
+    localStorage.setItem("todoList", JSON.stringify(newArray));
+
+  }
+
   return (
     <div className="wrapper">
       <section className="content">
@@ -16,27 +51,23 @@ const App = () => {
         </header>
 
         <div className="lecture">
-          <Form />
+          <Form todoList={todoList} setTodoList={setTodoList} />
           <div id="lecture-list">
             <ul>
-              <TodoItem
-                completed={false}
-                title="Complete assignment 5 (Create an TODO app)"
-                description="Description of your task goes here"
-                priority="Low" // "Medium" or "High"
-              />
-              <TodoItem
-                completed={true}
-                title="Complete assignment 5 (Create an TODO app)"
-                description="Description of your task goes here"
-                priority="High"
-              />
-              <TodoItem
-                completed={true}
-                title="Complete assignment 5 (Create an TODO app)"
-                description="Description of your task goes here"
-                priority="Medium"
-              />
+              {todoList?.map((item) => {
+                console.log(item);
+                return (
+                  <TodoItem
+                    key={item?.title}
+                    completed={item?.completed}
+                    title={item?.title}
+                    description={item?.description}
+                    priority={item?.priority} // "Medium" or "High"
+                    handleCompleted={handleCompleted}
+                    handleDelete={handleDelete}
+                  />
+                );
+              })}
             </ul>
           </div>
         </div>

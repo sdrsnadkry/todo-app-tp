@@ -25,7 +25,7 @@ const TodoItem = (props) => {
       <div>
         {!props.completed && (
           <>
-            <button className="btn btn-success">
+            <button className="btn btn-success" onClick={() => props.handleCompleted(props)}>
               <i className="fas fa-check"></i>
             </button>
             <button className="btn btn-warning">
@@ -33,7 +33,7 @@ const TodoItem = (props) => {
             </button>
           </>
         )}
-        <button className="btn btn-danger">
+        <button className="btn btn-danger"  onClick={() => props.handleDelete(props)}>
           <i className="far fa-trash-alt"></i>
         </button>
       </div>

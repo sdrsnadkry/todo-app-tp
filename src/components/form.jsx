@@ -10,13 +10,13 @@ const validationSchema = object({
 });
 
 const obj = {
-    title: "Complete assignment 5 (Create an TODO app)",
-    description: "Description of your task goes here",
-    priority: "Low",
-    completed: false,
-}
+  title: "Complete assignment 5 (Create an TODO app)",
+  description: "Description of your task goes here",
+  priority: "Low",
+  completed: false,
+};
 
-const Form = () => {
+const Form = (props) => {
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -25,7 +25,9 @@ const Form = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      const newArray = [...props.todoList, values];
+      props.setTodoList(newArray);
+      localStorage.setItem("todoList", JSON.stringify(newArray));
     },
   });
 
