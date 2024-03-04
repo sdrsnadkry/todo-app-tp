@@ -1,8 +1,6 @@
 import React from "react";
 
 const TodoItem = (props) => {
-  console.log(props);
-
   return (
     <li>
       <div>
@@ -28,7 +26,7 @@ const TodoItem = (props) => {
             <button className="btn btn-success" onClick={() => props.handleCompleted(props)}>
               <i className="fas fa-check"></i>
             </button>
-            <button className="btn btn-warning">
+            <button className="btn btn-warning"   onClick={() => props.handleEdit(props)}>
               <i className="fas fa-pencil"></i>
             </button>
           </>

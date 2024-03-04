@@ -9,25 +9,42 @@ const validationSchema = object({
   description: string().required("Description is required"),
 });
 
-const obj = {
-  title: "Complete assignment 5 (Create an TODO app)",
-  description: "Description of your task goes here",
-  priority: "Low",
-  completed: false,
-};
-
 const Form = (props) => {
+  console.log(props.todoList);
+
   const formik = useFormik({
-    initialValues: {
-      title: "",
-      priority: "",
-      description: "",
-    },
+    initialValues: props.initialValue,
+    enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      const newArray = [...props.todoList, values];
+      let newArray = [];
+
+      if (props?.initialValue?.id) {
+        newArray = props?.todoList?.map((item) => {
+          if (item?.id === props?.initialValue?.id) {
+            return {
+              id: item?.id,
+              title: values?.title,
+              priority: values?.priority,
+              description: values?.description,
+            };
+          } else {
+            return item;
+          }
+        });
+      } else {
+        newArray = [...props.todoList, { ...values, id: Math.random() }];
+      }
       props.setTodoList(newArray);
       localStorage.setItem("todoList", JSON.stringify(newArray));
+
+      formik.resetForm({
+        values: {
+          title: "",
+          priority: "Low",
+          description: "",
+        },
+      });
     },
   });
 
@@ -83,7 +100,7 @@ const Form = (props) => {
           </div>
         </div>
         <button className="success" type="submit">
-          Add
+          {props.initialValue?.id ? "Update" : "Add"}
         </button>
       </form>
     </div>

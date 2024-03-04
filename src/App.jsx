@@ -9,17 +9,23 @@ import Form from "./components/form";
 const App = () => {
   const [todoList, setTodoList] = useState([]);
 
+  const [initialValue, setInitialValue] = useState({
+    id: null,
+    title: "",
+    priority: "",
+    description: "",
+  });
+
   useEffect(() => {
     const list = localStorage.getItem("todoList");
-
     const parsedList = JSON.parse(list);
 
-    setTodoList(parsedList);
+    setTodoList(parsedList || []);
   }, []);
 
   const handleCompleted = (todoItem) => {
     const newArray = todoList?.map((item) => {
-      if (item?.title === todoItem.title) {
+      if (item?.id === todoItem.id) {
         return {
           ...item,
           completed: true,
@@ -35,12 +41,21 @@ const App = () => {
 
   const handleDelete = (todoItem) => {
     const newArray = todoList?.filter((item) => {
-      return item?.title !== todoItem.title;
-    })
-    setTodoList(newArray)
+      return item?.id !== todoItem.id;
+    });
+    setTodoList(newArray);
     localStorage.setItem("todoList", JSON.stringify(newArray));
+  };
 
-  }
+  const handleEdit = (todoItem) => {
+    console.log(todoItem);
+    setInitialValue({
+      id: todoItem.id,
+      title: todoItem.title,
+      priority: todoItem.priority,
+      description: todoItem.description,
+    });
+  };
 
   return (
     <div className="wrapper">
@@ -51,20 +66,25 @@ const App = () => {
         </header>
 
         <div className="lecture">
-          <Form todoList={todoList} setTodoList={setTodoList} />
+          <Form
+            todoList={todoList}
+            setTodoList={setTodoList}
+            initialValue={initialValue}
+          />
           <div id="lecture-list">
             <ul>
               {todoList?.map((item) => {
-                console.log(item);
                 return (
                   <TodoItem
                     key={item?.title}
+                    id={item?.id}
                     completed={item?.completed}
                     title={item?.title}
                     description={item?.description}
                     priority={item?.priority} // "Medium" or "High"
                     handleCompleted={handleCompleted}
                     handleDelete={handleDelete}
+                    handleEdit={handleEdit}
                   />
                 );
               })}
